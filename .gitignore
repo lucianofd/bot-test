@@ -1,0 +1,32 @@
+# Dependencias
+node_modules/
+
+# Archivos sensibles
+.env
+credenciales.json
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Cachés de librerías
+.wwebjs_cache/
+
+# Archivos de sistema (por si estás en Windows/Mac/Linux)
+.DS_Store
+Thumbs.db
+
+# Coverage (si usás Jest, Mocha u otro)
+coverage/
+
+# Compilados o builds
+dist/
+build/
+
+# Otros
+*.pid
+*.seed
+*.pid.lock

@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@google-cloud/dialogflow": "^7.2.0",
+    "@google-cloud/firestore": "^7.11.3",
+    "bot2": "^1.0.0",
+    "dotenv": "^17.2.1",
+    "googleapis": "^154.0.0",
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.31.0",
+    "winston": "^3.17.0"
+  }
+}
