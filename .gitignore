@@ -15,7 +15,7 @@ yarn-error.log*
 # Cachés de librerías
 .wwebjs_cache/
 
-# Archivos de sistema (por si estás en Windows/Mac/Linux)
+# Archivos de sistema 
 .DS_Store
 Thumbs.db
 
@@ -30,3 +30,7 @@ build/
 *.pid
 *.seed
 *.pid.lock
+
+
+# Datos de sesión
+auth/session/Default/
