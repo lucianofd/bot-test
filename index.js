@@ -1,10 +1,13 @@
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
-const fs = require('fs/promises');
+const fs = require('fs/promises'); 
 const path = require('path');
-
-const { agregarRegistro } = require('./sheets.js');
 const logger = require('./logger');
+
+const botService = require('./botService');
+
+// Configure Google credentials
+process.env.GOOGLE_APPLICATION_CREDENTIALS = './credenciales.json';
 
 async function iniciarBot() {
   const client = new Client({
@@ -48,30 +51,14 @@ async function iniciarBot() {
     const texto = msg.body;
     if (!texto) return;
 
-    const partes = texto.trim().split(' ');
-    if (partes[0].toLowerCase() !== 'gasto' || isNaN(parseFloat(partes[1]))) {
-      await msg.reply('❌ Usa: gasto 200 categoria descripcion');
-      return;
-    }
-
-    const monto = parseFloat(partes[1]);
-    const categoria = partes[2] || 'sin_categoria';
-    const descripcion = partes.slice(3).join(' ');
-
-    logger.info(`💸 Registrando: $${monto} en ${categoria} - ${descripcion}`);
-
     try {
-      await agregarRegistro({
-        fecha: new Date().toISOString().split('T')[0],
-        monto,
-        categoria,
-        descripcion
-      });
-
-      await msg.reply(`✅ Gasto registrado: $${monto} en ${categoria} ${descripcion ? '(' + descripcion + ')' : ''}`);
+      const sessionId = msg.from;
+      const respuesta = await botService.processMessage(sessionId, texto);
+      // --- Validación de respuesta ---
+            await msg.reply(respuesta ?? '❌ No pude procesar tu solicitud. Por favor, intenta de nuevo.');    
     } catch (error) {
-      logger.error('❌ Error al registrar gasto: ' + error.message);
-      await msg.reply('❌ Error al registrar el gasto. Intentalo más tarde.');
+      logger.error('❌ Error al procesar el mensaje:', error);
+      await msg.reply('❌ Lo siento, ha ocurrido un error interno. Inténtalo más tarde.');
     }
   });
 
