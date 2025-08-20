@@ -20,13 +20,14 @@ async function processMessage(sessionId, messageText) {
         },
     };
 
+    try{
     const responses = await sessionClient.detectIntent(request);
     const result = responses[0].queryResult;
 
     logger.info(`🔍 Dialogflow detectó el intent: ${result.intent.displayName}`);
     
     // 2. Usar la respuesta de Dialogflow
-    if (result.intent.displayName === 'registrar_gasto') {
+       if (result.intent.displayName === 'registrar_gasto') {
         const monto = result.parameters.fields.monto.numberValue;
         const categoria = result.parameters.fields.categoria.stringValue;
         const descripcion = result.parameters.fields.descripcion.stringValue || result.queryText; // Usar la descripción si se extrae, o el texto original
@@ -48,12 +49,17 @@ async function processMessage(sessionId, messageText) {
 
         return `✅ Gasto registrado: $${monto} en ${categoria}.`;
 
-    } else {
+       } else {
         // Si el intent no es 'registrar_gasto', manejarlo como una respuesta de reserva.
         return result.fulfillmentText || '❌ No entendí tu solicitud. ¿Puedes intentar de nuevo?';
+        }
+
+    } catch (error) {
+    logger.error('❌ Error en Dialogflow o Firestore:', error);
+    return '❌ Ha ocurrido un error interno al procesar tu solicitud.';
     }
 }
 
 module.exports = {
     processMessage
-};
+}

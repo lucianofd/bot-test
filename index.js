@@ -6,9 +6,6 @@ const logger = require('./logger');
 
 const botService = require('./botService');
 
-// Configure Google credentials
-process.env.GOOGLE_APPLICATION_CREDENTIALS = './credenciales.json';
-
 async function iniciarBot() {
   const client = new Client({
     authStrategy: new LocalAuth({ dataPath: './auth' }),
