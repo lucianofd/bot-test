@@ -1,20 +1,13 @@
 // botService.js
 
-const dialogflow = require('@google-cloud/dialogflow');
-const { Firestore } = require('@google-cloud/firestore');
-const logger = require('./logger'); 
+// Importa los clientes y la configuración del archivo config.js
+const { PROJECT_ID, firestore, sessionClient, LANGUAGE_CODE } = require('./config');
+const logger = require('./logger');
 
-// CONFIGURACIÓN DE PROYECTO
-const projectId = 'gastosbot-466422'; // Tu Project ID
-const languageCode = 'es-ES';
-
-// Clientes de las APIs
-const sessionClient = new dialogflow.SessionsClient();
-const firestore = new Firestore();
 
 // Función principal para procesar el mensaje
 async function processMessage(sessionId, messageText) {
-    const sessionPath = sessionClient.projectAgentSessionPath(projectId, sessionId);
+    const sessionPath = sessionClient.projectAgentSessionPath(PROJECT_ID, sessionId);
     
     // 1. Enviar el mensaje a Dialogflow para que lo interprete
     const request = {
@@ -22,7 +15,7 @@ async function processMessage(sessionId, messageText) {
         queryInput: {
             text: {
                 text: messageText,
-                languageCode: languageCode,
+                languageCode: LANGUAGE_CODE,
             },
         },
     };
